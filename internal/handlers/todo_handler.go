@@ -33,3 +33,14 @@ func CreateTodoInput(pool *pgxpool.Pool) gin.HandlerFunc {
 
 	}
 }
+
+func GetTodos(pool *pgxpool.Pool) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		todos, err := repository.GetTodos(c.Request.Context(), pool)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve todos"})
+			return
+		}
+		c.JSON(http.StatusOK, todos)
+	}
+}
